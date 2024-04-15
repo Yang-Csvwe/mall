@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://${MYSQL_SERVICE_HOST:k8s-master}:${MYSQL_SERVICE_PORT:32000}/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: root
     druid:

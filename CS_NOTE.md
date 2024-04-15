@@ -51,3 +51,54 @@ registry.aliyuncs.com/google_containers/etcd                      3.4.3-0       
 + 开放端口2375的网站地址：https://www.cnblogs.com/hongdada/p/11512901.html
 
 + 端口2375存在隐患，官方解决方案网址：https://docs.docker.com/engine/security/protect-access/
+
+
+
+## mall在Windows环境下的部署
+
+### MySQL
+
++ 版本：5.7
++ 数据库账号/密码：root/root
++ 创建数据库`mall`，导入项目`document/sql`文件夹下的`mall.sql`，初始化数据
+
+### Redis
+
++ 版本：5.0.14.1
+
+### ElasticSearch
+
++ 版本：7.17.3
++ 分词器版本：elasticsearch-analysis-ik（版本同7.17.3）
+
+### Kibana
+
++ 版本：7.17.3
+
+## Logstash
+
++ 版本：7.17.3
+
+###  MongoDB
+
++ 版本：5.0.9
+
+### RabbitMQ
+
++ 版本：3.10.5
+
+### MinIO
+
+### OSS
+
+
+
+
+
+### 环境
+
+| 软件        | 网址                                                |
+| ----------- | --------------------------------------------------- |
+| Helm        | https://helm.sh/zh/docs/intro/install/              |
+| K8S集群升级 | https://cloud.tencent.com/developer/article/1849119 |
+
