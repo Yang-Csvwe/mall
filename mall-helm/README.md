@@ -1,17 +1,13 @@
+
+
 ## Idea配置kubernetes插件
-### kubectl.exe下载
-+ 网址：https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-kubectl-binary-with-curl-on-windows
 
-### helm.exe下载
-+ 网址：https://github.com/helm/helm/tags
++ 根据k8s集群版本，下载指定版本的插件
 
-## helm
-+ helm添加chart仓库
-```shell
-helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
-helm repo add aliyun bitnami	https://charts.bitnami.com/bitnami                    
-helm repo add aliyun stable 	http://mirror.azure.cn/kubernetes/charts
-```
+| Idea插件    | 网址                                                         | 版本     |
+| ----------- | ------------------------------------------------------------ | -------- |
+| kubectl.exe | https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-kubectl-binary-with-curl-on-windows | v1.22.17 |
+| helm.exe    | https://github.com/helm/helm/tags                            | v3.9.4   |
 
 ## k8s集群版本升级
 + master节点
@@ -80,16 +76,33 @@ mount k8s-master:/storage_nfs /storage_nfs
 
 
 
+## 应用安装
 
-## k8s集群配置
-### StorageClass
-```shell
-helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=k8s-master --set nfs.path=/nfs
-```
-+ 验证，生成storageclass：nfs-client，pvc的storageclass为nfs-client
-```shell
-[root@k8s-master /]# kubectl get storageclass
-NAME         PROVISIONER                                     RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
-nfs-client   cluster.local/nfs-subdir-external-provisioner   Delete          Immediate           true                   2m43s
-```
++ Helm仓库
+
+| Helme仓库别名（自己定义）       | Helm仓库地址                                                 |
+| ------------------------------- | ------------------------------------------------------------ |
+| aliyun                          | https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts       |
+| bitnami                         | https://charts.bitnami.com/bitnami                           |
+| stable                          | http://mirror.azure.cn/kubernetes/charts                     |
+| nfs-subdir-external-provisioner | https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/ |
+| ingress-nginx                   | https://kubernetes.github.io/ingress-nginx                   |
+
++ 应用安装（选用版本）
+
+| 应用                            | Helm仓库别名                    | CHART  | 指令                                                         |
+| :------------------------------ | ------------------------------- | ------ | ------------------------------------------------------------ |
+| ingress-nginx                   | ingress-nginx                   | 4.4.2  | 创建控制器：ingress-nginx                                    |
+| nfs-subdir-external-provisioner | nfs-subdir-external-provisioner | 4.0.18 | --set nfs.server=k8s-master 指定nfs服务器地址<br/>--set nfs.path=/nfs 指定nfs服务器共享目录<br/><br/>pv实现动态创建，StorageClass：nfs-client |
+| mysql                           | stable                          | 1.6.9  | /                                                            |
+| redis                           | stable                          | 10.5.7 | /                                                            |
+|                                 |                                 |        |                                                              |
+|                                 |                                 |        |                                                              |
+|                                 |                                 |        |                                                              |
+|                                 |                                 |        |                                                              |
+|                                 |                                 |        |                                                              |
+
+
+
+
+
