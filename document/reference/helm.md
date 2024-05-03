@@ -1,5 +1,17 @@
 # Helm常用指令
 
+## helm安装
+```shell
+# 下载并解压需要的版本
+[root@k8s-master ~]# tar zvxf helm-v3.14.3-linux-amd64.tar.gz
+# 重命名，方便管理
+[root@k8s-master ~]# mv linux-amd64/ helm-v3.14.3
+# 移动helm程序到/usr/local/bin/
+[root@k8s-master ~]# mv helm-v3.14.3/helm /usr/local/bin/helm
+# 验证
+[root@k8s-master ~]# helm version
+```
+
 ## Helm 仓库常用命令
 ### 添加仓库
 - helm repo add bitnami https://charts.bitnami.com/bitnami
