@@ -1,32 +1,47 @@
 # nfs-subdir-external-provisioner
 
-## 介绍
-- 前提
-  - 搭建好kubernetes集群，集群中各节点并安装了nfs-utils
-  - 搭建好NFS服务器，并共享一个目录给kubernetes集群使用
-- nfs-subdir-external-provisioner是一个用于kubernetes的NFS外部provisioner，它允许用户将NFS服务器挂载到kubernetes集群中，并使用它来创建PersistentVolume（PV）和PersistentVolumeClaim（PVC）
-- nfs-subdir-external-provisioner通过在NFS服务器上创建子目录来支持多个PVC同时使用同一个NFS路径
-- nfs-subdir-external-provisioner还支持动态卷创建和删除
-- 当PVC被删除时，nfs-subdir-external-provisioner会自动删除NFS服务器上的子目录
-- 当PVC被创建时，nfs-subdir-external-provisioner会自动创建NFS服务器上的子目录
-
+## 安装nfs服务器
+- 安装nfs-utils、rpcbind
+```shell
+[root@k8s-master ~]# yum install rpcbind nfs-utils -y
+```
+```shell
+# 在nfs服务端创建共享目录，设置文件夹权限
+[root@k8s-master ~]# mkdir -p /data/nfs && chmod 777 -R /data/nfs
+# 编辑NFS配置并加入以下内容，192.168.11.0为允许访问的网段
+[root@k8s-master ~]# cat > /etc/exports <<EOF
+/data/nfs 192.168.11.0/24(rw,sync,no_all_squash,no_subtree_check)
+EOF
+# 载入配置
+[root@k8s-master ~]# exportfs -rv
+# 启动并设置开机自启
+[root@k8s-master ~]# systemctl enable rpcbind --now && systemctl enable nfs --now
+```
+## k8s各节点安装nfs-utils
+```shell
+[root@k8s-master /]# yum install nfs-utils -y
+```
 ## 安装nfs-subdir-external-provisioner
 - 添加nfs-subdir-external-provisioner镜像仓库
 ```shell
-helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+[root@k8s-master ~]# helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 ```
 - 安装nfs-subdir-external-provisioner release
 ```shell
 # --set nfs.server：NFS服务器地址
 # --set nfs.path：NFS服务器共享目录
-helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+[root@k8s-master ~]# helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
   --version 4.0.18 \
   --set nfs.server=k8s-master \
-  --set nfs.path=/nfs \
+  --set nfs.path=/data/nfs \
   --namespace nfs-subdir-external-provisioner \
   --create-namespace
 ```
 - 卸载nfs-subdir-external-provisioner release
 ```shell
-helm unintall nfs-subdir-external-provisioner --namespace nfs-subdir-external-provisioner
+[root@k8s-master ~]# helm unintall nfs-subdir-external-provisioner --namespace nfs-subdir-external-provisioner
+```
+```shell
+# 验证nfc-client安装是否成功，storageclass可以简写sc，kubectl get sc
+[root@k8s-master ~]# kubectl get storageclass
 ```
