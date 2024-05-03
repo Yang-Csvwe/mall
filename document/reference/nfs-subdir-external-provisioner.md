@@ -34,12 +34,13 @@ EOF
   --version 4.0.18 \
   --set nfs.server=k8s-master \
   --set nfs.path=/data/nfs \
+  --set image.repository=registry.cn-hangzhou.aliyuncs.com/iuxt/nfs-subdir-external-provisioner \
   --namespace nfs-subdir-external-provisioner \
   --create-namespace
 ```
 - 卸载nfs-subdir-external-provisioner release
 ```shell
-[root@k8s-master ~]# helm unintall nfs-subdir-external-provisioner --namespace nfs-subdir-external-provisioner
+[root@k8s-master ~]# helm uninstall nfs-subdir-external-provisioner --namespace nfs-subdir-external-provisioner
 ```
 ```shell
 # 验证nfc-client安装是否成功，storageclass可以简写sc，kubectl get sc
